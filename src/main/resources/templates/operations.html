@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Операции</title>
+    <div th:insert="~{layout :: head}"></div>
+</head>
+<body>
+<header th:insert="~{layout :: header}"></header>
+<section>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Название операции</th>
+                <th>Дата и время операции</th>
+                <th>Животное</th>
+                <th>Врач, проводящий операцию</th>
+                <th>Ассистент</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <form id="addNewOperation">
+                    <td><input type="text" id="name" class="form-control" required></td>
+                    <td><input id="datetimepicker" class="form-control ui-datepicker"></td>
+                    <td>
+                        <select id="animal" class="form-control">
+                            <option th:each="animal : ${animals}" th:value="${animal.id}" th:text="${animal.name} + ' ' + ${animal.kind}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="vet" class="form-control">
+                            <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName} + ' ' + ${vet.mainSpecialization}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="assistant" class="form-control">
+                            <option th:each="vet_assistant : ${vets}" th:value="${vet_assistant.id}" th:text="${vet_assistant.fullName} + ' ' + ${vet_assistant.mainSpecialization}"></option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Добавить" class="btn btn-success"></td>
+                </form>
+            </tr>
+            <tr th:each="operation : ${operations}" th:if="${operation.animal}">
+                <td th:text="${operation.name}"></td>
+                <td th:text="${operation.operationDate}"></td>
+                <td th:text="${operation.animal.name}"></td>
+                <td th:text="${operation.vet.fullName}"></td>
+                <td th:if="${operation.assistant}" th:text="${operation.assistant.fullName}"></td>
+                <td><a class="btn btn-danger delete" th:attr="data-id=${operation.id}">Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<script th:src="@{/js/operations.js}" type="text/javascript"></script>
+</body>
+</html>

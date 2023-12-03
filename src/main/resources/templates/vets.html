@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Персонал</title>
+    <div th:insert="~{layout :: head}"></div>
+    <script th:src="@{/js/vets.js}"></script>
+</head>
+<body>
+<header th:insert="~{layout :: header}"></header>
+<section>
+    <div class="container">
+        <h1>Врачи</h1>
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Основная специализиация</th>
+                    <th>Дополнительная специализация</th>
+                    <th>Должность</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <form id="addVetForm">
+                        <td><input type="text" id="fullName" class="form-control"></td>
+                        <td><input type="text" id="mainSpecialization" class="form-control"></td>
+                        <td><input type="text" id="secondSpecialization" class="form-control"></td>
+                        <td><input type="text" id="position" class="form-control"></td>
+                        <td><input type="submit" value="Добавить" class="btn btn-success"></td>
+                    </form>
+                </tr>
+                <tr th:each="vet : ${vets}">
+                    <form th:id="'vetForm_' + ${vet.id}">
+                        <input type="hidden" th:value="${vet.id}">
+                        <td><input type="text" th:value="${vet.fullName}" class="form-control"></td>
+                        <td><input type="text" th:value="${vet.mainSpecialization}" class="form-control"></td>
+                        <td><input type="text" th:value="${vet.secondSpecialization}" class="form-control"></td>
+                        <td><input type="text" th:value="${vet.position}" class="form-control"></td>
+                        <td><input type="submit" value="Обновить" class="btn btn-success update" th:attr="data-id=${vet.id}"></td>
+                        <td><a class="btn btn-danger delete" th:attr="data-id=${vet.id}">Удалить</a></td>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

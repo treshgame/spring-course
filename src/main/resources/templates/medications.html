@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Медикаменты</title>
+    <div th:insert="~{layout :: head}"></div>
+</head>
+<body>
+<header th:insert="~{layout :: header}"></header>
+<section>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <th>Название</th>
+                <th>Поставщик</th>
+                <th>Количество</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <form id="addNewMedication">
+                        <td><input type="text" id="name" class="form-control" required></td>
+                        <td>
+                            <select id="supplier" class="form-control">
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.name}" th:value="${supplier.id}"></option>
+                            </select>
+                        </td>
+                        <td><input type="number" class="form-control" id="amount" required></td>
+                        <td><input type="submit" class="btn btn-success" value="Добавить"></td>
+                    </form>
+                </tr>
+                <tr th:each="medication : ${medications}">
+                    <td th:text="${medication.name}"></td>
+                    <td th:text="${medication.supplier.name}"></td>
+                    <td th:text="${medication.amount}"> </td>
+                    <td><a class="btn btn-danger delete" th:attr="data-id=${medication.id}">Удалить</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<script th:src="@{/js/medications.js}" type="text/javascript"></script>
+</body>
+</html>

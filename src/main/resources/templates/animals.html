@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Животные</title>
+    <div th:insert="~{layout :: head}"></div>
+    <script th:src="@{/js/animals.js}" type="text/javascript"></script>
+</head>
+<body>
+<div th:insert="~{layout :: header}"></div>
+<section>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Кличка животного</th>
+                <th>Вид животного</th>
+                <th>Порода животного</th>
+                <th>Возраст животного</th>
+                <th>Хозяин животного</th>
+                <th>Лечащий врач</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <form id="addNewAnimal">
+                    <td><input type="text" id="name" class="form-control"></td>
+                    <td><input type="text" id="kind" class="form-control"></td>
+                    <td><input type="text" id="breed" class="form-control"></td>
+                    <td><input type="number" id="age" class="form-control"></td>
+                    <td><select id="owner" class="form-control">
+                        <option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.fullName} + ' ' + ${owner.phoneNumber} + ' ' + ${owner.email}" ></option>
+                    </select></td>
+                    <td>
+                        <select id="vet" class="form-control">
+                            <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName} + ' ' + ${vet.mainSpecialization}"></option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Добавить" class="btn btn-success"></td>
+                </form>
+                <td></td>
+            </tr>
+            <tr th:each="animal : ${animals}">
+                <form>
+                    <input type="text" th:id="'animal_id_' + ${animal.id}" hidden>
+                    <td><input type="text" th:id="'animal_name_' + ${animal.id}" th:value="${animal.name}" class="form-control"></td>
+                    <td><input type="text" th:id="'animal_kind_' + ${animal.id}" th:value="${animal.kind}" class="form-control"></td>
+                    <td><input type="text" th:id="'animal_breed_' + ${animal.id}" th:value="${animal.breed}" class="form-control"></td>
+                    <td><input type="number" th:id="'animal_age_' + ${animal.id}" th:value="${animal.age}" class="form-control"></td>
+                    <td>
+                        <select th:id="'animal_owner_' + ${animal.id}" class="form-control">
+                            <option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.fullName}" th:selected="${animal.owner.id == owner.id}">
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select th:id="'animal_vet_' + ${animal.id}" class="form-control">
+                            <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName}" th:selected="${animal.attendingVet.id == vet.id}">
+                            </option>
+                        </select>
+                    </td>
+                </form>
+                <td><a class="btn btn-success update" th:attr="data-id=${animal.id}">Обновить</a></td>
+                <td><a class="btn btn-danger delete" th:attr="data-id=${animal.id}">Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Процедуры</title>
+    <div th:insert="~{layout :: head}"></div>
+</head>
+<body>
+<header th:insert="~{layout :: header}"></header>
+<section>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Животное</th>
+                    <th>Дата</th>
+                    <th>Врач</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <form id="addNewProcedure">
+                        <td><input type="text" id="name" class="form-control" required></td>
+                        <td>
+                            <select id="animal" class="form-control">
+                                <option th:each="animal : ${animals}" th:value="${animal.id}" th:text="${animal.name} + ' ' + ${animal.kind}"></option>
+                            </select>
+                        </td>
+                        <td><input id="date" class="form-control"></td>
+                        <td>
+                            <select id="vet" class="form-control">
+                                <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName} + ' ' + ${vet.mainSpecialization}"></option>
+                            </select>
+                        </td>
+                        <td><input type="submit" class="btn btn-success" value="Добавить"></td>
+                    </form>
+                </tr>
+                <tr th:each="procedure : ${procedures}" th:if="${procedure.animal}">
+                    <td th:text="${procedure.name}"></td>
+                    <td th:text="${procedure.procedureDate}"></td>
+                    <td th:text="${procedure.animal.name}"></td>
+                    <td th:text="${procedure.vet.fullName}"></td>
+                    <td><a class="btn btn-danger delete" th:attr="data-id=${procedure.id}">Удалить</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<script th:src="@{/js/procedures.js}"></script>
+</body>
+</html>
