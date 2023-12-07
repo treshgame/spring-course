@@ -7,16 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/suppliers")
 public class SupplierRestController {
     @Autowired
     SupplierRepository supplierRepository;
+    @GetMapping("/get")
+    public List<Supplier> get(){
+        return supplierRepository.findAll();
+    }
     @PostMapping("/add")
     public ResponseEntity<Object> add(@RequestBody Supplier supplier){
         try {
             Supplier savedSupplier = supplierRepository.save(supplier);
-            return ResponseEntity.ok().body(savedSupplier);
+            return ResponseEntity.status(200).body(savedSupplier);
         }catch (Exception ex){
             return ResponseEntity.internalServerError().body(ex.getMessage());
         }
@@ -35,7 +41,7 @@ public class SupplierRestController {
     @PutMapping("/update")
     public ResponseEntity<Object> update(@RequestBody Supplier supplier){
         if(supplierRepository.findById(supplier.getId()).isEmpty()){
-            return ResponseEntity.status(400).body("Vet with such ID is not found");
+            return ResponseEntity.status(400).body("Supplier with such ID is not found");
         }
         try{
             supplierRepository.save(supplier);

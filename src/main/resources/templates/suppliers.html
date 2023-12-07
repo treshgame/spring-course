@@ -26,9 +26,12 @@
                     </form>
                 </tr>
                 <tr th:each="supplier : ${suppliers}">
-                    <td th:text="${supplier.name}"></td>
-                    <td th:text="${supplier.phoneNum}"></td>
-                    <td th:text="${supplier.email}"></td>
+                    <form>
+                        <td><input type="text" th:value="${supplier.name}" th:id="'name_' + ${supplier.id}" class="form-control" required></td>
+                        <td><input type="text" th:value="${supplier.phoneNum}" th:id="'phoneNum_' + ${supplier.id}" class="form-control"></td>
+                        <td><input type="email" th:value="${supplier.email}" th:id="'email_' + ${supplier.id}" class="form-control"></td>
+                    </form>
+                    <td><a class="btn btn-success update" th:attr="data-id=${supplier.id}">Обновить</a></td>
                     <td><a class="btn btn-danger delete" th:attr="data-id=${supplier.id}">Удалить</a></td>
                 </tr>
             </tbody>

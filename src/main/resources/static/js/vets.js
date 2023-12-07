@@ -39,10 +39,10 @@ $(document).ready(function () {
         event.preventDefault();
 
         let id = $(this).data("id");
-        let fullName = $("#vetForm_" + id + " input[type='text']:nth-of-child(1)").val();
-        let mainSpecialization = $("#vetForm_" + id + " input[type='text']:nth-of-child(2)").val();
-        let secondSpecialization = $("#vetForm_" + id + " input[type='text']:nth-of-child(3)").val();
-        let position = $("#vetForm_" + id + " input[type='text']:nth-of-child(4)").val();
+        let fullName = $("#vetFullName_" + id).val();
+        let mainSpecialization = $("#vetMainSpecialization_" + id).val();
+        let secondSpecialization = $("#vetSecondSpecialization_" + id).val();
+        let position = $("#vetPosition_" + id).val();
 
         $.ajax({
             type: "put",

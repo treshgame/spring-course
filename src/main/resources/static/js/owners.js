@@ -38,4 +38,32 @@ $(document).ready(function () {
             }
         })
     });
+
+    $(".update").click(function (event) {
+        event.preventDefault();
+
+        let ownerId = $(this).data("id");
+        let fullName = $("#fullName_" + ownerId).val();
+        let phoneNumber = $("#phoneNumber_" + ownerId).val();
+        let email = $("#email_" + ownerId).val();
+
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/owners/update",
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: ownerId,
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                email: email
+            }),
+            success: function () {
+                console.log("Owner updated successfully");
+                // Здесь вы можете обновить таблицу или выполнить другие действия
+            },
+            error: function () {
+                console.log("Error updating owner");
+            }
+        });
+    });
 });

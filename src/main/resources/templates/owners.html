@@ -29,9 +29,13 @@
                     </form>
                 </tr>
                 <tr th:each="ownerItem : ${owners}">
-                    <td th:text="${ownerItem.fullName}"></td>
-                    <td th:text="${ownerItem.phoneNumber}"></td>
-                    <td th:text="${ownerItem.email}"></td>
+                    <form th:if="${ownerItem.id}">
+                        <input type="hidden" th:value="${ownerItem.id}">
+                        <td><input type="text" th:value="${ownerItem.fullName}" th:id="'fullName_' + ${ownerItem.id}" class="form-control"></td>
+                        <td><input type="text" th:value="${ownerItem.phoneNumber}" th:id="'phoneNumber_' + ${ownerItem.id}" class="form-control"></td>
+                        <td><input type="text" th:value="${ownerItem.email}" th:id="'email_' + ${ownerItem.id}" class="form-control"></td>
+                    </form>
+                    <td><a class="btn btn-success update" th:attr="data-id=${ownerItem.id}">Обновить</a></td>
                     <td><a class="btn btn-danger delete" th:attr="data-id=${ownerItem.id}">Удалить</a></td>
                 </tr>
             </tbody>

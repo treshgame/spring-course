@@ -31,12 +31,12 @@
                     </form>
                 </tr>
                 <tr th:each="vet : ${vets}">
-                    <form th:id="'vetForm_' + ${vet.id}">
+                    <form>
                         <input type="hidden" th:value="${vet.id}">
-                        <td><input type="text" th:value="${vet.fullName}" class="form-control"></td>
-                        <td><input type="text" th:value="${vet.mainSpecialization}" class="form-control"></td>
-                        <td><input type="text" th:value="${vet.secondSpecialization}" class="form-control"></td>
-                        <td><input type="text" th:value="${vet.position}" class="form-control"></td>
+                        <td><input type="text" th:id="'vetFullName_' + ${vet.id}" th:value="${vet.fullName}" class="form-control"></td>
+                        <td><input type="text" th:id="'vetMainSpecialization_' + ${vet.id}" th:value="${vet.mainSpecialization}" class="form-control"></td>
+                        <td><input type="text" th:id="'vetSecondSpecialization_' + ${vet.id}" th:value="${vet.secondSpecialization}" class="form-control"></td>
+                        <td><input type="text" th:id="'vetPosition_' + ${vet.id}" th:value="${vet.position}" class="form-control"></td>
                         <td><input type="submit" value="Обновить" class="btn btn-success update" th:attr="data-id=${vet.id}"></td>
                         <td><a class="btn btn-danger delete" th:attr="data-id=${vet.id}">Удалить</a></td>
                     </form>

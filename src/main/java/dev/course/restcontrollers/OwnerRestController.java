@@ -37,8 +37,9 @@ public class OwnerRestController {
     @PutMapping("/update")
     public ResponseEntity<Object> update(@RequestBody Owner owner){
         if(ownerRepository.findById(owner.getId()).isEmpty()){
-            return ResponseEntity.status(400).body("Vet with such ID is not found");
+            return ResponseEntity.status(400).body("Owner with such ID is not found");
         }
+
         try{
             ownerRepository.save(owner);
             return ResponseEntity.noContent().build();

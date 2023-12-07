@@ -42,32 +42,41 @@ $(document).ready(function (){
         })
     });
 
-    $(".update").click(function (event){
+    $(".update").click(function (event) {
         event.preventDefault();
+
         let id = $(this).data("id");
+        let name = $("#animal_name_" + id).val();
+        let kind = $("#animal_kind_" + id).val();
+        let breed = $("#animal_breed_" + id).val();
+        let age = $("#animal_age_" + id).val();
+        let owner = $("#animal_owner_" + id).val();
+        let vet = $("#animal_vet_" + id).val();
+
         $.ajax({
-            type: "put",
+            type: "PUT",
             url: "http://localhost:8080/animals/update",
             contentType: "application/json",
             data: JSON.stringify({
                 id: id,
-                name: $("#animal_name_" + id).val(),
-                age: $("#animal_age_" + id).val(),
-                kind: $("#animal_kind_" + id).val(),
-                breed: $("#animal_breed_" + id).val(),
+                name: name,
+                kind: kind,
+                breed: breed,
+                age: age,
                 owner: {
-                    id: $("#animal_owner_" + id).val()
+                    id: owner
                 },
                 attendingVet: {
-                    id: $("#animal_vet_" + id).val()
+                    id: vet
                 }
             }),
             success: function () {
-                console.log("Успех")
+                console.log("Animal updated successfully");
+                // Здесь вы можете обновить таблицу или выполнить другие действия
             },
-            error: function(){
-                console.log("Ошибка")
+            error: function () {
+                console.log("Error updating animal");
             }
-        })
+        });
     });
 })

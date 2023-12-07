@@ -35,4 +35,33 @@ $(document).ready(function(){
             }
         })
     });
+
+    $(".update").click(function (event) {
+        event.preventDefault();
+
+        let medicationId = $(this).data("id");
+        let name = $("#name_" + medicationId).val();
+        let supplierId = $("#supplier_" + medicationId).val();
+        let amount = $("#amount_" + medicationId).val();
+
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/medications/update",
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: medicationId,
+                name: name,
+                supplier: {id: supplierId},
+                amount: amount
+            }),
+            success: function () {
+                console.log("Medication updated successfully");
+                // Здесь вы можете обновить таблицу или выполнить другие действия
+            },
+            error: function () {
+                console.log("Error updating medication");
+            }
+        });
+    });
+
 });

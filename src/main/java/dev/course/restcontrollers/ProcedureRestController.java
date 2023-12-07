@@ -36,7 +36,7 @@ public class ProcedureRestController {
     @PutMapping("/update")
     public ResponseEntity<Object> update(@RequestBody Procedure procedure){
         if(procedureRepository.findById(procedure.getId()).isEmpty()){
-            return ResponseEntity.status(400).body("Vet with such ID is not found");
+            return ResponseEntity.status(400).body("Procedure with such ID is not found");
         }
         try{
             procedureRepository.save(procedure);

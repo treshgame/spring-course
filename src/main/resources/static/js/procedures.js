@@ -41,4 +41,32 @@ $(document).ready(function () {
             }
         })
     });
+    $(".update").click(function (event) {
+        event.preventDefault();
+
+        let procedureId = $(this).data("id");
+        let name = $("#name_" + procedureId).val();
+        let procedureDate = $("#date_" + procedureId).val();
+        let animalId = $("#animal_" + procedureId).val();
+        let vetId = $("#vet_" + procedureId).val();
+
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/procedures/update",
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: procedureId,
+                name: name,
+                procedureDate: procedureDate,
+                animal: { id: animalId },
+                vet: { id: vetId }
+            }),
+            success: function () {
+                console.log("Procedure updated successfully");
+            },
+            error: function () {
+                console.log("Error updating procedure");
+            }
+        });
+    });
 })

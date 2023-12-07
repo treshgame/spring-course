@@ -30,9 +30,16 @@
                     </form>
                 </tr>
                 <tr th:each="medication : ${medications}">
-                    <td th:text="${medication.name}"></td>
-                    <td th:text="${medication.supplier.name}"></td>
-                    <td th:text="${medication.amount}"> </td>
+                    <form>
+                        <td><input type="text" th:value="${medication.name}" th:id="'name_' + ${medication.id}" class="form-control" required></td>
+                        <td>
+                            <select th:id="'supplier_' + ${medication.id}" class="form-control">
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.name}" th:value="${supplier.id}" th:selected="${medication.supplier.id == supplier.id}"></option>
+                            </select>
+                        </td>
+                        <td><input type="number" th:value="${medication.amount}" th:id="'amount_' + ${medication.id}" class="form-control" required></td>
+                    </form>
+                    <td><a class="btn btn-success update" th:attr="data-id=${medication.id}">Обновить</a></td>
                     <td><a class="btn btn-danger delete" th:attr="data-id=${medication.id}">Удалить</a></td>
                 </tr>
             </tbody>

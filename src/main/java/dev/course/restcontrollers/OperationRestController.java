@@ -38,7 +38,7 @@ public class OperationRestController {
     @PutMapping("/update")
     public ResponseEntity<Object> update(@RequestBody Operation operation){
         if(operationRepository.findById(operation.getId()).isEmpty()){
-            return ResponseEntity.status(400).body("Vet with such ID is not found");
+            return ResponseEntity.status(400).body("Operation with such ID is not found");
         }
         try{
             operationRepository.save(operation);
