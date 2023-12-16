@@ -4,17 +4,24 @@ import dev.course.controllers.MedicationController;
 import dev.course.entity.Medication;
 import dev.course.entity.Operation;
 import dev.course.repositories.MedicationRepository;
+import dev.course.repositories.SupplierRepository;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/medications")
+@Hidden
 public class MedicationRestController {
     @Autowired
     MedicationRepository medicationRepository;
+    @Autowired
+    SupplierRepository supplierRepository;
     @GetMapping("/get")
     private List<Medication> get(){
         return medicationRepository.findAll();
@@ -24,7 +31,10 @@ public class MedicationRestController {
     public ResponseEntity<Object> add(@RequestBody Medication medication){
         try {
             Medication savedMedication = medicationRepository.save(medication);
-            return ResponseEntity.status(200).body(savedMedication);
+            Map<String, Object> response = new HashMap<>();
+            response.put("medication", savedMedication);
+            response.put("suppliers", supplierRepository.findAll());
+            return ResponseEntity.status(200).body(response);
         }catch (Exception ex){
             return ResponseEntity.status(400).body(ex.getCause());
         }
@@ -36,7 +46,7 @@ public class MedicationRestController {
             medicationRepository.deleteById(id);
             return ResponseEntity.status(200).body("");
         }catch(Exception ex){
-            return ResponseEntity.status(400).body("Ошибка");
+            return ResponseEntity.status(400).body(ex.getMessage());
         }
     }
 

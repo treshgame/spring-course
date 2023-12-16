@@ -14,11 +14,52 @@ $(document).ready(function () {
                 phoneNumber: $('#phoneNumber').val(),
                 email: $('#email').val()
             }),
-            success: function (data, textStatus, xhr) {
+            success: function (data) {
+                let newRow = $("<tr>").attr("id", "row" + data.id);
 
+                // Add hidden input with owner ID
+                newRow.append($("<input>").attr({
+                    type: "hidden",
+                    value: data.id
+                }));
+
+                // Add input fields for owner information
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "fullName_" + data.id,
+                    value: data.fullName,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "phoneNumber_" + data.id,
+                    value: data.phoneNumber,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "email_" + data.id,
+                    value: data.email,
+                    class: "form-control"
+                })));
+
+                // Add update and delete buttons
+                newRow.append($("<td>").append($("<a>").attr({
+                    href: "#",
+                    class: "btn btn-success update",
+                    "data-id": data.id
+                }).text("Обновить")));
+                newRow.append($("<td>").append($("<a>").attr({
+                    href: "#",
+                    class: "btn btn-danger delete",
+                    "data-id": data.id
+                }).text("Удалить")));
+
+                // Append the new row to the table
+                $("tbody").append(newRow);
             },
-            error: function (xhr, textStatus, errorThrown) {
-
+            error: function (xhr) {
+                alert("Произошла ошибка");
             }
         });
         $('#addOwnerForm')[0].reset()
@@ -31,10 +72,10 @@ $(document).ready(function () {
             url: "http://localhost:8080/owners/delete/" + id,
             contentType: "applications/json",
             success: function (){
-                console.log("Успех")
+                $("#row_" + id).hide();
             },
             error: function () {
-                console.log("Ошибка")
+                alert("Произошла ошибка");
             }
         })
     });
@@ -58,11 +99,10 @@ $(document).ready(function () {
                 email: email
             }),
             success: function () {
-                console.log("Owner updated successfully");
-                // Здесь вы можете обновить таблицу или выполнить другие действия
+                alert("Обновление произошло успешно");
             },
             error: function () {
-                console.log("Error updating owner");
+                alert("Произошла ошибка");
             }
         });
     });

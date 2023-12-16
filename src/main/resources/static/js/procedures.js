@@ -18,7 +18,60 @@ $(document).ready(function () {
                 }
             }),
             success: function (data) {
-                console.log("Успех: " + data)
+                let procedure = data.procedure;
+                let animals = data.animals;
+                let vets = data.vets;
+                let newRow = $("<tr>").attr("id", "row" + procedure.id);
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "name_" + procedure.id,
+                    value: procedure.name,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<select>").attr({
+                    id: "animal_" + procedure.id,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "date_" + procedure.id,
+                    value: procedure.procedureDate,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<select>").attr({
+                    id: "vet_" + procedure.id,
+                    class: "form-control"
+                })));
+
+                vets.forEach(function (vet) {
+                    newRow.find("#vet_" + procedure.id).append(
+                        $("<option>").attr({
+                            value: vet.id,
+                            selected: procedure.vet.id == vet.id
+                        }).text(vet.fullName)
+                    );
+                });
+                animals.forEach(function (animal) {
+                    newRow.find("#animal_" + procedure.id).append(
+                        $("<option>").attr({
+                            value: animal.id,
+                            selected: procedure.animal.id == animal.id
+                        }).text(animal.name + " " + animal.kind)
+                    );
+                });
+
+                newRow.append($("<td>").append($("<a>").attr({
+                    href: "#",
+                    class: "btn btn-success update",
+                    "data-id": procedure.id
+                }).text("Обновить")));
+                newRow.append($("<td>").append($("<a>").attr({
+                    href: "#",
+                    class: "btn btn-danger delete",
+                    "data-id": procedure.id
+                }).text("Удалить")));
+
+                $("tbody").append(newRow);
             },
             error: function (error){
                 console.log("Ошибка:" + error)
@@ -34,10 +87,11 @@ $(document).ready(function () {
             url: "http://localhost:8080/procedures/delete/" + id,
             contentType: "applications/json",
             success: function (){
+                $("#row_" + id).hide();
                 console.log("Успех")
             },
             error: function () {
-                console.log("Ошибка")
+                alert("Ошибка")
             }
         })
     });
@@ -62,10 +116,10 @@ $(document).ready(function () {
                 vet: { id: vetId }
             }),
             success: function () {
-                console.log("Procedure updated successfully");
+                alert("Procedure updated successfully");
             },
             error: function () {
-                console.log("Error updating procedure");
+                alert("Error updating procedure");
             }
         });
     });

@@ -2,12 +2,14 @@ package dev.course.restcontrollers;
 
 import dev.course.entity.Vet;
 import dev.course.repositories.VetRepository;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/vets")
+@Hidden
 public class VetRestController {
     @Autowired
     VetRepository vetRepository;
@@ -15,8 +17,8 @@ public class VetRestController {
     public ResponseEntity<Object> add(@RequestBody Vet vet){
         System.out.println(vet);
         try {
-            vetRepository.save(vet);
-            return ResponseEntity.status(200).body("Ok");
+            Vet savedVet = vetRepository.save(vet);
+            return ResponseEntity.status(200).body(savedVet);
         } catch (Exception e){
             return ResponseEntity.status(400).body(e.getMessage());
         }

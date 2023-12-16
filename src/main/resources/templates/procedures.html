@@ -37,15 +37,15 @@
                         <td><input type="submit" class="btn btn-success" value="Добавить"></td>
                     </form>
                 </tr>
-                <tr th:each="procedure : ${procedures}" th:if="${procedure.animal}">
+                <tr th:each="procedure : ${procedures}" th:if="${procedure.animal}" th:id="'row_' + ${procedure.id}">
                     <form>
                         <td><input type="text" th:value="${procedure.name}" th:id="'name_' + ${procedure.id}" class="form-control" required></td>
-                        <td><input type="text" th:value="${procedure.procedureDate}" th:id="'date_' + ${procedure.id}" class="form-control" required></td>
                         <td>
                             <select th:id="'animal_' + ${procedure.id}" class="form-control">
                                 <option th:each="animal : ${animals}" th:value="${animal.id}" th:text="${animal.name} + ' ' + ${animal.kind}" th:selected="${procedure.animal.id == animal.id}"></option>
                             </select>
                         </td>
+                        <td><input type="text" th:value="${procedure.procedureDate}" th:id="'date_' + ${procedure.id}" class="form-control" required></td>
                         <td>
                             <select th:id="'vet_' + ${procedure.id}" class="form-control">
                                 <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName} + ' ' + ${vet.mainSpecialization}" th:selected="${procedure.vet.id == vet.id}"></option>

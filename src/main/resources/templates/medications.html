@@ -29,7 +29,7 @@
                         <td><input type="submit" class="btn btn-success" value="Добавить"></td>
                     </form>
                 </tr>
-                <tr th:each="medication : ${medications}">
+                <tr th:each="medication : ${medications}" th:id="'row_' + ${medication.id}">
                     <form>
                         <td><input type="text" th:value="${medication.name}" th:id="'name_' + ${medication.id}" class="form-control" required></td>
                         <td>

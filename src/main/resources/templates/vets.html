@@ -30,7 +30,7 @@
                         <td><input type="submit" value="Добавить" class="btn btn-success"></td>
                     </form>
                 </tr>
-                <tr th:each="vet : ${vets}">
+                <tr th:each="vet : ${vets}" th:id="'row_' + ${vet.id}">
                     <form>
                         <input type="hidden" th:value="${vet.id}">
                         <td><input type="text" th:id="'vetFullName_' + ${vet.id}" th:value="${vet.fullName}" class="form-control"></td>

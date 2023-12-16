@@ -19,7 +19,88 @@ $(document).ready(function (){
                 }
             }),
             success: function (data) {
-                console.log(data);
+                // Access Animal, Owners, and Vets from the response
+                let savedAnimal = data.animal;
+                let owners = data.owners;
+                let vets = data.vets;
+
+                // Add a new row to the table with the data returned from the server
+                let newRow = $("<tr>").attr("id", "row" + savedAnimal.id);
+
+                newRow.append($("<input>").attr({
+                    type: "text",
+                    value: savedAnimal.id,
+                    hidden: true
+                }));
+
+                // Add input fields for animal information
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "animal_name_" + savedAnimal.id,
+                    value: savedAnimal.name,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "animal_kind_" + savedAnimal.id,
+                    value: savedAnimal.kind,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "text",
+                    id: "animal_breed_" + savedAnimal.id,
+                    value: savedAnimal.breed,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "number",
+                    id: "animal_age_" + savedAnimal.id,
+                    value: savedAnimal.age,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<select>").attr({
+                    id: "animal_owner_" + savedAnimal.id,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<select>").attr({
+                    id: "animal_vet_" + savedAnimal.id,
+                    class: "form-control"
+                })));
+
+                // Populate owner dropdown
+                owners.forEach(function (owner) {
+                    newRow.find("#animal_owner_" + savedAnimal.id).append(
+                        $("<option>").attr({
+                            value: owner.id,
+                            selected: savedAnimal.owner.id == owner.id
+                        }).text(owner.fullName)
+                    );
+                });
+
+                // Populate vet dropdown
+                vets.forEach(function (vet) {
+                    newRow.find("#animal_vet_" + savedAnimal.id).append(
+                        $("<option>").attr({
+                            value: vet.id,
+                            selected: savedAnimal.attendingVet.id == vet.id
+                        }).text(vet.fullName)
+                    );
+                });
+
+                // Add update and delete buttons
+                newRow.append($("<td>").append($("<a>").attr({
+                    href: "#",
+                    class: "btn btn-success update",
+                    "data-id": savedAnimal.id
+                }).text("Обновить")));
+                newRow.append($("<td>").append($("<a>").attr({
+                    href: "#",
+                    class: "btn btn-danger delete",
+                    "data-id": savedAnimal.id
+                }).text("Удалить")));
+
+                // Append the new row to the table
+                $("tbody").append(newRow);
             },error: function (data){
                console.log(data);
             }
@@ -34,10 +115,10 @@ $(document).ready(function (){
             url: "http://localhost:8080/animals/delete/" + id,
             contentType: "application/json",
             success: function (){
-                console.log("Успех")
+                $("row_" + id).hide();
             },
             error: function () {
-                console.log("Ошибка")
+                alert("Произошла ошибка");
             }
         })
     });
@@ -71,11 +152,11 @@ $(document).ready(function (){
                 }
             }),
             success: function () {
-                console.log("Animal updated successfully");
+                alert("Animal updated successfully");
                 // Здесь вы можете обновить таблицу или выполнить другие действия
             },
             error: function () {
-                console.log("Error updating animal");
+                alert("Error updating animal");
             }
         });
     });

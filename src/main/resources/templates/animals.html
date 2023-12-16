@@ -42,7 +42,7 @@
                 </form>
                 <td></td>
             </tr>
-            <tr th:each="animal : ${animals}">
+            <tr th:each="animal : ${animals}" th:id="'row_' + ${animal.id}">
                 <form>
                     <input type="text" th:id="'animal_id_' + ${animal.id}" hidden>
                     <td><input type="text" th:id="'animal_name_' + ${animal.id}" th:value="${animal.name}" class="form-control"></td>

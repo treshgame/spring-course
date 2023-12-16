@@ -3,6 +3,7 @@ package dev.course.restcontrollers;
 import dev.course.entity.Owner;
 import dev.course.entity.Procedure;
 import dev.course.repositories.OwnerRepository;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @RequestMapping("/owners")
+@Hidden
 public class OwnerRestController {
     @Autowired
     public OwnerRepository ownerRepository;
@@ -18,7 +20,7 @@ public class OwnerRestController {
     public ResponseEntity<Object> addOwner(@RequestBody Owner owner){
         try {
             Owner savedOwner = ownerRepository.save(owner);
-            return ResponseEntity.ok().body(savedOwner.getId());
+            return ResponseEntity.ok().body(savedOwner);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при добавлении владельца" + e.getMessage());
         }

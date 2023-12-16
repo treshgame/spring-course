@@ -43,7 +43,7 @@
                     <td><input type="submit" value="Добавить" class="btn btn-success"></td>
                 </form>
             </tr>
-            <tr th:each="operation : ${operations}" th:if="${operation.assistant}">
+            <tr th:each="operation : ${operations}" th:if="${operation.assistant}" th:id="'row_' + ${operation.id}">
                 <form>
                     <td><input type="text" th:value="${operation.name}" th:id="'name_' + ${operation.id}" class="form-control" required></td>
                     <td><input type="text" th:value="${operation.operationDate}" th:id="'datetimepicker_' + ${operation.id}" class="form-control ui-datepicker" required></td>

@@ -25,7 +25,7 @@
                         <td><input type="submit" class="btn btn-success" value="Добавить"></td>
                     </form>
                 </tr>
-                <tr th:each="supplier : ${suppliers}">
+                <tr th:each="supplier : ${suppliers}" th:id="'row_' + ${supplier.id}">
                     <form>
                         <td><input type="text" th:value="${supplier.name}" th:id="'name_' + ${supplier.id}" class="form-control" required></td>
                         <td><input type="text" th:value="${supplier.phoneNum}" th:id="'phoneNum_' + ${supplier.id}" class="form-control"></td>

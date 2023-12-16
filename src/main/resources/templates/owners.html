@@ -25,10 +25,10 @@
                         <td><input type="text" id="fullName" class="form-control"></td>
                         <td><input type="text" id="phoneNumber" class="form-control"></td>
                         <td><input type="text" id="email" class="form-control"></td>
-                        <td><input type="submit" class="btn btn-primary"></td>
+                        <td><input type="submit" class="btn btn-success" value="Добавить"></td>
                     </form>
                 </tr>
-                <tr th:each="ownerItem : ${owners}">
+                <tr th:each="ownerItem : ${owners}" th:id="'row' + ${ownerItem.id}">
                     <form th:if="${ownerItem.id}">
                         <input type="hidden" th:value="${ownerItem.id}">
                         <td><input type="text" th:value="${ownerItem.fullName}" th:id="'fullName_' + ${ownerItem.id}" class="form-control"></td>

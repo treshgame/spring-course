@@ -2,23 +2,44 @@ package dev.course.restcontrollers;
 
 import dev.course.entity.Animal;
 import dev.course.entity.Medication;
+import dev.course.entity.Owner;
+import dev.course.entity.Vet;
 import dev.course.repositories.AnimalRepository;
+import dev.course.repositories.OwnerRepository;
+import dev.course.repositories.VetRepository;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/animals")
+@Hidden
 public class AnimalRestController {
     @Autowired
     AnimalRepository animalRepository;
+    @Autowired
+    VetRepository vetRepository;
+    @Autowired
+    OwnerRepository ownerRepository;
 
     @PostMapping("/add")
     public ResponseEntity<Object> add(@RequestBody Animal animal){
         try{
             Animal savedAnimal = animalRepository.save(animal);
-            // Возвращаем успешный ответ с добавленным животным
-            return ResponseEntity.ok().body(savedAnimal);
+            List<Owner> owners = ownerRepository.findAll();
+            List<Vet> vets = vetRepository.findAll();
+
+            // Create a custom response object
+            Map<String, Object> response = new HashMap<>();
+            response.put("animal", savedAnimal);
+            response.put("owners", owners);
+            response.put("vets", vets);
+            return ResponseEntity.ok().body(response);
         }catch (Exception ex){
             return ResponseEntity.status(200).body(ex.getMessage());
         }

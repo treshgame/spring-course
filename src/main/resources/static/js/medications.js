@@ -12,11 +12,51 @@ $(document).ready(function(){
                },
                amount: $("#amount").val()
            }),
-           success: function (){
-               console.log("Успех")
+           success: function (data){
+               let medication = data.medication
+               let suppliers = data.suppliers
+
+               let newRow = $("<tr>").attr("id", "row" + medication.id)
+               newRow.append($("<td>").append($("<input>").attr({
+                   type: "text",
+                   id: "name_" + medication.id,
+                   value: medication.name,
+                   class: "form-control"
+               })));
+               newRow.append($("<td>").append($("<select>").attr({
+                   id: "supplier" + medication.id,
+                   class: "form-control"
+               })));
+               newRow.append($("<td>").append($("<input>").attr({
+                   type: "text",
+                   id: "amount_" + medication.id,
+                   value: medication.amount,
+                   class: "form-control"
+               })));
+
+               suppliers.forEach(function (supplier) {
+                   newRow.find("#supplier" + medication.id).append(
+                       $("<option>").attr({
+                           value: supplier.id,
+                           selected: medication.supplier.id == supplier.id
+                       }).text(supplier.name )
+                   );
+               });
+
+               newRow.append($("<td>").append($("<a>").attr({
+                   href: "#",
+                   class: "btn btn-success update",
+                   "data-id": medication.id
+               }).text("Обновить")));
+               newRow.append($("<td>").append($("<a>").attr({
+                   href: "#",
+                   class: "btn btn-danger delete",
+                   "data-id": medication.id
+               }).text("Удалить")));
+               $("tbody").append(newRow);
            },
-           error: function (){
-               console.log("Ошибка")
+           error: function (err){
+               console.log(err)
            }
        })
    });
@@ -28,10 +68,10 @@ $(document).ready(function(){
             url: "http://localhost:8080/medications/delete/" + id,
             contentType: "applications/json",
             success: function (){
-                console.log("Успех")
+                $("#row_" + id).hide()
             },
             error: function () {
-                console.log("Ошибка")
+
             }
         })
     });
