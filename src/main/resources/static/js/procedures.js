@@ -61,23 +61,28 @@ $(document).ready(function () {
                 });
 
                 newRow.append($("<td>").append($("<a>").attr({
-                    href: "#",
                     class: "btn btn-success update",
                     "data-id": procedure.id
                 }).text("Обновить")));
                 newRow.append($("<td>").append($("<a>").attr({
-                    href: "#",
                     class: "btn btn-danger delete",
                     "data-id": procedure.id
                 }).text("Удалить")));
 
                 $("tbody").append(newRow);
+                $("#addNewProcedure")[0].reset();
             },
             error: function (error){
-                console.log("Ошибка:" + error)
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(var key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         })
-        $("#addNewProcedure")[0].reset();
+
     });
     $(".delete").click(function (event) {
         event.preventDefault()
@@ -116,10 +121,19 @@ $(document).ready(function () {
                 vet: { id: vetId }
             }),
             success: function () {
-                alert("Procedure updated successfully");
+                let message_box = $("#message_box");
+                message_box.text("Запись успешно обновлена")
+                message_box.css('color', 'green')
+                message_box.css('font-size', '14pt')
             },
-            error: function () {
-                alert("Error updating procedure");
+            error: function (error) {
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(var key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         });
     });

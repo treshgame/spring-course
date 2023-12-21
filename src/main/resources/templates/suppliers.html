@@ -9,6 +9,7 @@
 <header th:insert="~{layout :: header}"></header>
 <section>
     <div class="container">
+        <p id="message_box"></p>
         <table class="table table-bordered">
             <thead>
                 <th>Имя</th>
@@ -19,7 +20,7 @@
             <tbody>
                 <tr>
                     <form id="addNewSupplier">
-                        <td><input type="text" id="name" class="form-control" required></td>
+                        <td><input type="text" id="name" class="form-control"></td>
                         <td><input type="text" id="phoneNum" class="form-control"></td>
                         <td><input type="email" id="email" class="form-control"></td>
                         <td><input type="submit" class="btn btn-success" value="Добавить"></td>
@@ -27,7 +28,7 @@
                 </tr>
                 <tr th:each="supplier : ${suppliers}" th:id="'row_' + ${supplier.id}">
                     <form>
-                        <td><input type="text" th:value="${supplier.name}" th:id="'name_' + ${supplier.id}" class="form-control" required></td>
+                        <td><input type="text" th:value="${supplier.name}" th:id="'name_' + ${supplier.id}" class="form-control"></td>
                         <td><input type="text" th:value="${supplier.phoneNum}" th:id="'phoneNum_' + ${supplier.id}" class="form-control"></td>
                         <td><input type="email" th:value="${supplier.email}" th:id="'email_' + ${supplier.id}" class="form-control"></td>
                     </form>

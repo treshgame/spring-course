@@ -6,6 +6,7 @@ import dev.course.entity.Operation;
 import dev.course.repositories.MedicationRepository;
 import dev.course.repositories.SupplierRepository;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class MedicationRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> add(@RequestBody Medication medication){
+    public ResponseEntity<Object> add(@Valid @RequestBody Medication medication){
         try {
             Medication savedMedication = medicationRepository.save(medication);
             Map<String, Object> response = new HashMap<>();
@@ -51,7 +52,7 @@ public class MedicationRestController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestBody Medication medication){
+    public ResponseEntity<Object> update(@Valid @RequestBody Medication medication){
         if(medicationRepository.findById(medication.getId()).isEmpty()){
             return ResponseEntity.status(400).body("Medication with such ID is not found");
         }

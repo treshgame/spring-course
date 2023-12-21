@@ -1,13 +1,12 @@
 package dev.course.restcontrollers;
 
-import dev.course.entity.Animal;
-import dev.course.entity.Operation;
-import dev.course.entity.Owner;
-import dev.course.entity.Vet;
+import dev.course.entity.*;
 import dev.course.repositories.AnimalRepository;
+import dev.course.repositories.MedicationRepository;
 import dev.course.repositories.OperationRepository;
 import dev.course.repositories.VetRepository;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,26 +26,23 @@ public class OperationRestController {
     private VetRepository vetRepository;
     @Autowired
     private AnimalRepository animalRepository;
+    @Autowired
+    private MedicationRepository medicationRepository;
     @PostMapping("/add")
-    public ResponseEntity<Object> add(@RequestBody Operation operation){
+    public ResponseEntity<Object> add(@Valid @RequestBody Operation operation){
         try {
             Operation savedOperation = operationRepository.save(operation);
-
-            // Fetch the updated lists of animals, vets, and assistants
             List<Animal> animals = animalRepository.findAll();
             List<Vet> vets = vetRepository.findAll();
-            List<Vet> assistants = vetRepository.findAll(); // You might need to change this if assistants are different from vets
-
-            // Create a custom response object
+            List<Medication> medications = medicationRepository.findAll();
             Map<String, Object> response = new HashMap<>();
             response.put("operation", savedOperation);
             response.put("animals", animals);
             response.put("vets", vets);
-            response.put("assistants", assistants);
+            response.put("medications", medications);
 
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            // Возвращаем ответ с ошибкой и сообщением об ошибке
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при добавлении операции");
         }
     }
@@ -62,7 +58,7 @@ public class OperationRestController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestBody Operation operation){
+    public ResponseEntity<Object> update(@Valid @RequestBody Operation operation){
         if(operationRepository.findById(operation.getId()).isEmpty()){
             return ResponseEntity.status(400).body("Operation with such ID is not found");
         }

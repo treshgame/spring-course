@@ -6,6 +6,7 @@ import dev.course.repositories.AnimalRepository;
 import dev.course.repositories.ProcedureRepository;
 import dev.course.repositories.VetRepository;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ProcedureRestController {
     @Autowired
     VetRepository vetRepository;
     @PostMapping("/add")
-    public ResponseEntity<Object> add(@RequestBody Procedure procedure){
+    public ResponseEntity<Object> add(@Valid @RequestBody Procedure procedure){
         try{
             Procedure savedProcedure = procedureRepository.save(procedure);
             Map<String, Object> response = new HashMap<>();
@@ -49,7 +50,7 @@ public class ProcedureRestController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestBody Procedure procedure){
+    public ResponseEntity<Object> update(@Valid @RequestBody Procedure procedure){
         if(procedureRepository.findById(procedure.getId()).isEmpty()){
             return ResponseEntity.status(400).body("Procedure with such ID is not found");
         }

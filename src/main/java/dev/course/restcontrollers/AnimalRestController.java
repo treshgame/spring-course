@@ -8,6 +8,7 @@ import dev.course.repositories.AnimalRepository;
 import dev.course.repositories.OwnerRepository;
 import dev.course.repositories.VetRepository;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AnimalRestController {
     OwnerRepository ownerRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<Object> add(@RequestBody Animal animal){
+    public ResponseEntity<Object> add(@Valid @RequestBody Animal animal){
         try{
             Animal savedAnimal = animalRepository.save(animal);
             List<Owner> owners = ownerRepository.findAll();
@@ -56,10 +57,9 @@ public class AnimalRestController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestBody Animal animal){
-        System.out.println(animal);
+    public ResponseEntity<Object> update(@Valid @RequestBody Animal animal){
         if(animalRepository.findById(animal.getId()).isEmpty()){
-            return ResponseEntity.status(400).body("Vet with such ID is not found");
+            return ResponseEntity.status(400).body("Animal with such ID is not found");
         }
         try{
             animalRepository.save(animal);

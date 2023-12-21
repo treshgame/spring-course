@@ -57,12 +57,19 @@ $(document).ready(function () {
 
                 // Append the new row to the table
                 $("tbody").append(newRow);
+                $('#addOwnerForm')[0].reset()
             },
-            error: function (xhr) {
-                alert("Произошла ошибка");
+            error: function (error) {
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(var key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         });
-        $('#addOwnerForm')[0].reset()
+
     });
     $(".delete").click(function (event) {
         event.preventDefault()
@@ -75,7 +82,7 @@ $(document).ready(function () {
                 $("#row_" + id).hide();
             },
             error: function () {
-                alert("Произошла ошибка");
+
             }
         })
     });
@@ -99,10 +106,19 @@ $(document).ready(function () {
                 email: email
             }),
             success: function () {
-                alert("Обновление произошло успешно");
+                let message_box = $("#message_box");
+                message_box.text("Запись успешно обновлена")
+                message_box.css('color', 'green')
+                message_box.css('font-size', '14pt')
             },
-            error: function () {
-                alert("Произошла ошибка");
+            error: function (error) {
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(var key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         });
     });

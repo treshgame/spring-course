@@ -25,7 +25,6 @@ $(document).ready(function (){
                 let savedOperation = data.operation;
                 let animals = data.animals;
                 let vets = data.vets;
-                let assistants = data.assistants;
 
                 // Add a new row to the table with the data returned from the server
                 let newRow = $("<tr>").attr("id", "row_" + savedOperation.id);
@@ -60,8 +59,6 @@ $(document).ready(function (){
                     class: "form-control"
                 })));
 
-                // ... (Rest of the code to populate dropdowns)
-                // Populate animal dropdown
                 animals.forEach(function (animal) {
                     newRow.find("#animal_" + savedOperation.id).append(
                         $("<option>").attr({
@@ -71,7 +68,6 @@ $(document).ready(function (){
                     );
                 });
 
-                // Populate vet dropdown
                 vets.forEach(function (vet) {
                     newRow.find("#vet_" + savedOperation.id).append(
                         $("<option>").attr({
@@ -79,19 +75,14 @@ $(document).ready(function (){
                             selected: savedOperation.vet.id == vet.id
                         }).text(vet.fullName + ' ' + vet.mainSpecialization)
                     );
-                });
-
-                // Populate assistant dropdown
-                assistants.forEach(function (assistant) {
                     newRow.find("#assistant_" + savedOperation.id).append(
                         $("<option>").attr({
-                            value: assistant.id,
-                            selected: savedOperation.assistant.id == assistant.id
-                        }).text(assistant.fullName + ' ' + assistant.mainSpecialization)
+                            value: vet.id,
+                            selected: savedOperation.assistant.id == vet.id
+                        }).text(vet.fullName + ' ' + vet.mainSpecialization)
                     );
                 });
 
-                // Add update and delete buttons
                 newRow.append($("<td>").append($("<a>").attr({
                     href: "#",
                     class: "btn btn-success update",
@@ -103,11 +94,16 @@ $(document).ready(function (){
                     "data-id": savedOperation.id
                 }).text("Удалить")));
 
-                // Append the new row to the table
                 $("tbody").append(newRow);
             },
             error: function (error) {
-                console.log("Ошибка при добавлении операции: " + error.responseText);
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(let key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         });
         $("#addNewOperation")[0].reset();
@@ -150,11 +146,19 @@ $(document).ready(function (){
                 assistant: { id: assistantId }
             }),
             success: function () {
-                console.log("Operation updated successfully");
-                // Здесь вы можете обновить таблицу или выполнить другие действия
+                let message_box = $("#message_box");
+                message_box.text("Запись успешно обновлена")
+                message_box.css('color', 'green')
+                message_box.css('font-size', '14pt')
             },
-            error: function () {
-                console.log("Error updating operation");
+            error: function (error){
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(let key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         });
     });

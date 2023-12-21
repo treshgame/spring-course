@@ -39,25 +39,28 @@ $(document).ready(function () {
 
                 // Add update and delete buttons
                 newRow.append($("<td>").append($("<a>").attr({
-                    href: "#",
                     class: "btn btn-success update",
                     "data-id": savedSupplier.id
                 }).text("Обновить")));
                 newRow.append($("<td>").append($("<a>").attr({
-                    href: "#",
                     class: "btn btn-danger delete",
                     "data-id": savedSupplier.id
                 }).text("Удалить")));
 
                 // Append the new row to the table
                 $("tbody").append(newRow);
+                $("#addNewSupplier")[0].reset();
             },
-            error: function () {
-                console.log("Ошибка")
+            error: function (error) {
+                let message_box = $("#message_box")
+                for(var key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
 
         });
-        $("#addNewSupplier")[0].reset();
     });
     $(".delete").click(function (event) {
         event.preventDefault()
@@ -92,11 +95,19 @@ $(document).ready(function () {
                 email: email
             }),
             success: function () {
-                console.log("Supplier updated successfully");
-                // Здесь вы можете обновить таблицу или выполнить другие действия
+                let message_box = $("#message_box");
+                message_box.text("Запись успешно обновлена")
+                message_box.css('color', 'green')
+                message_box.css('font-size', '14pt')
             },
-            error: function () {
-                console.log("Error updating supplier");
+            error: function (error) {
+                let message_box = $("#message_box")
+                message_box.text("");
+                for(var key in error.responseJSON){
+                    message_box.text(message_box.text() + " - " + error.responseJSON[key]);
+                }
+                message_box.css("color","red");
+                message_box.css("font-size", "14pt");
             }
         });
     });

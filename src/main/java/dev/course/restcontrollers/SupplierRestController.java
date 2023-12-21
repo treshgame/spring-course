@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +38,7 @@ public class SupplierRestController {
             @ApiResponse(responseCode = "504", description = "Ошибка сервера в случае не добавления поставщика")
     })
     @PostMapping("/add")
-    public ResponseEntity<Object> add(
-          @RequestBody Supplier supplier){
+    public ResponseEntity<Object> add(@Valid @RequestBody Supplier supplier){
         try {
             Supplier savedSupplier = supplierRepository.save(supplier);
             return ResponseEntity.status(200).body(savedSupplier);
@@ -68,7 +68,7 @@ public class SupplierRestController {
             description = "Обновляет поставщика в базе данных"
     )
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestBody Supplier supplier){
+    public ResponseEntity<Object> update(@Valid @RequestBody Supplier supplier){
         if(supplierRepository.findById(supplier.getId()).isEmpty()){
             return ResponseEntity.status(400).body("Supplier with such ID is not found");
         }
