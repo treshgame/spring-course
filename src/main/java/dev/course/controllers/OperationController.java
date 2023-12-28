@@ -1,9 +1,11 @@
 package dev.course.controllers;
 
 import dev.course.entity.Animal;
+import dev.course.entity.Medication;
 import dev.course.entity.Operation;
 import dev.course.entity.Vet;
 import dev.course.repositories.AnimalRepository;
+import dev.course.repositories.MedicationRepository;
 import dev.course.repositories.OperationRepository;
 import dev.course.repositories.VetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +23,19 @@ public class OperationController {
     VetRepository vetRepository;
     @Autowired
     AnimalRepository animalRepository;
+    @Autowired
+    MedicationRepository medicationRepository;
     @GetMapping("/operations")
     public String index(Model model){
         List<Vet> vets = vetRepository.findAll();
         List<Operation> operations = operationRepository.findAll();
         List<Animal> animals = animalRepository.findAll();
+        List<Medication> medications = medicationRepository.findAll();
         model.addAttribute("vets", vets);
         model.addAttribute("operations", operations);
         model.addAttribute("animals", animals);
+        model.addAttribute("medications", medications);
+
         return "operations";
     }
 }

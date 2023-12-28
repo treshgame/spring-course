@@ -1,10 +1,7 @@
 package dev.course.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +32,7 @@ public class Operation {
     private Vet assistant;
     @ManyToOne
     private Medication medication;
-    @PositiveOrZero
+    @Positive(message = "Не выбрано количество медикамента")
     private int amount;
 
 }

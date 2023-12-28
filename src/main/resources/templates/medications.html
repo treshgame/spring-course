@@ -9,6 +9,31 @@
 <header th:insert="~{layout :: header}"></header>
 <section>
     <div class="container">
+        <form id="addAmountForm" class="w-50 mb-3" >
+            <div class="form-item mb-2">
+                <label for="medicationId" class="form-label">Медикамент</label>
+                <select id="medicationId" class="form-control">
+                    <option th:each="medication : ${medications}" th:value="${medication.id}"
+                            th:text="${medication.name} + ' от ' + ${medication.supplier.name}"></option>
+                </select>
+            </div>
+            <div class="form-item mb-2 center">
+                <label for="newAmount">Добавить количество</label>
+                <input type="number" id="newAmount" class="form-control">
+            </div>
+            <input type="submit" class="btn btn-success">
+        </form>
+        <form id="showFromSupplier" class="w-50 center">
+            <label class="form-label">Показать медикаменты от поставщика:</label>
+            <select id="fromSupplier" class="form-control">
+                <option value="0">Все</option>
+                <option th:each="supplier : ${suppliers}"
+                    th:value="${supplier.id}"
+                    th:text="${supplier.name}">
+                </option>
+            </select>
+            <input type="submit" class="btn btn-success">
+        </form>
         <p id="message_box"></p>
         <table class="table table-bordered">
             <thead>
@@ -27,8 +52,8 @@
                             </select>
                         </td>
                         <td><input type="number" class="form-control" id="amount" required></td>
-                        <td><input type="submit" class="btn btn-success" value="Добавить"></td>
                     </form>
+                    <td><input type="submit" class="btn btn-success add" value="Добавить"></td>
                 </tr>
                 <tr th:each="medication : ${medications}" th:id="'row_' + ${medication.id}">
                     <form>

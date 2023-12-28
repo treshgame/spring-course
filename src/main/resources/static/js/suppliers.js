@@ -13,7 +13,6 @@ $(document).ready(function () {
             success: function (data) {
                 let savedSupplier = data;
 
-                // Add a new row to the table with the data returned from the server
                 let newRow = $("<tr>").attr("id", "row_" + savedSupplier.id);
 
                 // Add input fields to the new row
@@ -37,7 +36,6 @@ $(document).ready(function () {
                     class: "form-control"
                 })));
 
-                // Add update and delete buttons
                 newRow.append($("<td>").append($("<a>").attr({
                     class: "btn btn-success update",
                     "data-id": savedSupplier.id

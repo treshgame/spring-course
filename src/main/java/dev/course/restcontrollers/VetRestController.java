@@ -14,6 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class VetRestController {
     @Autowired
     VetRepository vetRepository;
+
+    @GetMapping("/get")
+    public ResponseEntity<Object> get(){
+        try{
+            return ResponseEntity.status(200).body(vetRepository.findAll());
+        }catch(Exception ex){
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Object> add(@Valid @RequestBody Vet vet){
         try {

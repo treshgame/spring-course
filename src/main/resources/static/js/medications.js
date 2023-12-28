@@ -1,5 +1,5 @@
 $(document).ready(function(){
-   $("#addNewMedication").submit(function (event){
+   $(".add").click(function (event){
        event.preventDefault()
        $.ajax({
            url: "http://localhost:8080/medications/add",
@@ -16,7 +16,7 @@ $(document).ready(function(){
                let medication = data.medication
                let suppliers = data.suppliers
 
-               let newRow = $("<tr>").attr("id", "row" + medication.id)
+               let newRow = $("<tr>").attr("id", "row_" + medication.id)
                newRow.append($("<td>").append($("<input>").attr({
                    type: "text",
                    id: "name_" + medication.id,
@@ -24,7 +24,7 @@ $(document).ready(function(){
                    class: "form-control"
                })));
                newRow.append($("<td>").append($("<select>").attr({
-                   id: "supplier" + medication.id,
+                   id: "supplier_" + medication.id,
                    class: "form-control"
                })));
                newRow.append($("<td>").append($("<input>").attr({
@@ -35,7 +35,7 @@ $(document).ready(function(){
                })));
 
                suppliers.forEach(function (supplier) {
-                   newRow.find("#supplier" + medication.id).append(
+                   newRow.find("#supplier_" + medication.id).append(
                        $("<option>").attr({
                            value: supplier.id,
                            selected: medication.supplier.id == supplier.id
@@ -44,16 +44,16 @@ $(document).ready(function(){
                });
 
                newRow.append($("<td>").append($("<a>").attr({
-                   href: "#",
                    class: "btn btn-success update",
                    "data-id": medication.id
                }).text("Обновить")));
                newRow.append($("<td>").append($("<a>").attr({
-                   href: "#",
                    class: "btn btn-danger delete",
                    "data-id": medication.id
                }).text("Удалить")));
                $("tbody").append(newRow);
+               $("#message_box").text("")
+               $("#addNewMedication")[0].reset();
            },
            error: function (error){
                let message_box = $("#message_box")
@@ -117,4 +117,130 @@ $(document).ready(function(){
         });
     });
 
+    $("#addAmountForm").submit(function (event){
+        event.preventDefault()
+
+        let medicationId = $("#medicationId").val()
+        let newAmount = $("#newAmount").val()
+        let data = JSON.stringify({
+            medicationId: Number(medicationId),
+            amount: newAmount
+        })
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/medications/add/amount',
+            contentType: "application/json",
+            data: data,
+            success: function (data) {
+                $("#amount_" + medicationId).val(data.amount)
+                $("#addAmountForm")[0].reset()
+            },
+            error: function (error) {
+                let message_box = $("#message_box")
+                message_box.text(error)
+                message_box.css("color", "red")
+                message_box.css("font-size", "14pt")
+            }
+        })
+    });
+
+    $("#showFromSupplier").submit(function (event) {
+        event.preventDefault()
+        let supplierId = $("#fromSupplier").val()
+        let url
+        if(supplierId == 0){
+            url = "http://localhost:8080/medications/get"
+        }else{
+            url = "http://localhost:8080/medications/supplied_by/" + supplierId
+        }
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                console.log(data)
+                var tbody = $("table tbody");
+                tbody.empty();
+                let suppliers = data.suppliers
+                let data_iterate
+                if(supplierId == 0){
+                    let firstRow = $("<tr>")
+                    firstRow.append($("<td>").append($("<input>").attr({
+                        type: "text",
+                        id: "name",
+                        class: "form-control"
+                    })));
+                    firstRow.append($("<td>").append($("<select>").attr({
+                        id: "supplier",
+                        class: "form-control"
+                    })));
+                    firstRow.append($("<td>").append($("<input>").attr({
+                        type: "number",
+                        id: "amount",
+                        class: "form-control"
+                    })));
+
+                    suppliers.forEach(function (supplier) {
+                        firstRow.find("#supplier").append(
+                            $("<option>").attr({
+                                value: supplier.id
+                            }).text(supplier.name )
+                        );
+                    });
+                    firstRow.append($("<td>").append($("<input>").attr({
+                        class: "btn btn-success add",
+                        type: "submit",
+                        value: "Добавить"
+                    })))
+                    $("tbody").append(firstRow);
+                }
+                data_iterate = data.medications
+                for(var data_item in data_iterate){
+                    let newRow = $("<tr>").attr("id", "row_" + data_iterate[data_item].id)
+                    newRow.append($("<td>").append($("<input>").attr({
+                        type: "text",
+                        id: "name_" + data_iterate[data_item].id,
+                        value: data_iterate[data_item].name,
+                        class: "form-control"
+                    })));
+                    newRow.append($("<td>").append($("<select>").attr({
+                        id: "supplier" + data_iterate[data_item].id,
+                        class: "form-control"
+                    })));
+                    newRow.append($("<td>").append($("<input>").attr({
+                        type: "text",
+                        id: "amount_" + data_iterate[data_item].id,
+                        value: data_iterate[data_item].amount,
+                        class: "form-control"
+                    })));
+
+                    suppliers.forEach(function (supplier) {
+                        newRow.find("#supplier" + data_iterate[data_item].id).append(
+                            $("<option>").attr({
+                                value: supplier.id,
+                                selected: data_iterate[data_item].supplier.id == supplier.id
+                            }).text(supplier.name )
+                        );
+                    });
+
+                    newRow.append($("<td>").append($("<a>").attr({
+                        class: "btn btn-success update",
+                        "data-id": data_iterate[data_item].id
+                    }).text("Обновить")));
+                    newRow.append($("<td>").append($("<a>").attr({
+                        class: "btn btn-danger delete",
+                        "data-id": data_iterate[data_item].id
+                    }).text("Удалить")));
+                    $("tbody").append(newRow);
+                    $("#message_box").text("")
+                }
+            },
+            error: function (error) {
+                let message_box = $("#message_box")
+                message_box.text(error)
+                message_box.css("color", "red")
+                message_box.css("font-size", "14pt")
+            }
+        })
+    })
 });

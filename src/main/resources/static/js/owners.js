@@ -15,7 +15,7 @@ $(document).ready(function () {
                 email: $('#email').val()
             }),
             success: function (data) {
-                let newRow = $("<tr>").attr("id", "row" + data.id);
+                let newRow = $("<tr>").attr("id", "row_" + data.id);
 
                 // Add hidden input with owner ID
                 newRow.append($("<input>").attr({

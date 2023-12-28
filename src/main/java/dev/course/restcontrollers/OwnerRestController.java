@@ -10,12 +10,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/owners")
 @Hidden
 public class OwnerRestController {
     @Autowired
     public OwnerRepository ownerRepository;
+
+    @GetMapping("/get")
+    public ResponseEntity<Object> get(){
+        try{
+            List<Owner> owners = ownerRepository.findAll();
+            return ResponseEntity.status(200).body(owners);
+        }catch(Exception ex){
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
 
     @PostMapping("/add")
     public ResponseEntity<Object> addOwner(@Valid @RequestBody Owner owner){

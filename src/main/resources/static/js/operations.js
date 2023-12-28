@@ -19,12 +19,17 @@ $(document).ready(function (){
                 },
                 assistant: {
                     id: $("#assistant").val()
-                }
+                },
+                medication:{
+                    id: $("#medication").val()
+                },
+                amount:$("#amount").val()
             }),
             success: function (data) {
                 let savedOperation = data.operation;
                 let animals = data.animals;
                 let vets = data.vets;
+                let medications = data.medications;
 
                 // Add a new row to the table with the data returned from the server
                 let newRow = $("<tr>").attr("id", "row_" + savedOperation.id);
@@ -35,14 +40,12 @@ $(document).ready(function (){
                     id: "name_" + savedOperation.id,
                     value: savedOperation.name,
                     class: "form-control",
-                    required: true
                 })));
                 newRow.append($("<td>").append($("<input>").attr({
                     type: "text",
                     id: "datetimepicker_" + savedOperation.id,
                     value: savedOperation.operationDate,
                     class: "form-control ui-datepicker",
-                    required: true
                 })));
 
                 // Add dropdowns for Animal, Vet, and Assistant to the new row
@@ -58,6 +61,17 @@ $(document).ready(function (){
                     id: "assistant_" + savedOperation.id,
                     class: "form-control"
                 })));
+                newRow.append($("<td>").append($("<select>").attr({
+                    id: "medication_" + savedOperation.id,
+                    class: "form-control"
+                })));
+
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "number",
+                    id: "amount_" + savedOperation.id,
+                    value: savedOperation.amount,
+                    class: "form-control",
+                })));
 
                 animals.forEach(function (animal) {
                     newRow.find("#animal_" + savedOperation.id).append(
@@ -66,8 +80,8 @@ $(document).ready(function (){
                             selected: savedOperation.animal.id == animal.id
                         }).text(animal.name + ' ' + animal.kind)
                     );
-                });
 
+                });
                 vets.forEach(function (vet) {
                     newRow.find("#vet_" + savedOperation.id).append(
                         $("<option>").attr({
@@ -81,6 +95,15 @@ $(document).ready(function (){
                             selected: savedOperation.assistant.id == vet.id
                         }).text(vet.fullName + ' ' + vet.mainSpecialization)
                     );
+
+                });
+                medications.forEach(function (medication){
+                   newRow.find("#medication_" + savedOperation.id).append(
+                       $("<option>").attr({
+                            value: medication.id,
+                            selected: savedOperation.medication.id == medication.id
+                       }).text('Лекарство ' + medication.name + ' от поставщика ' + medication.supplier.name)
+                   )
                 });
 
                 newRow.append($("<td>").append($("<a>").attr({
@@ -95,6 +118,7 @@ $(document).ready(function (){
                 }).text("Удалить")));
 
                 $("tbody").append(newRow);
+                $("#addNewOperation")[0].reset();
             },
             error: function (error) {
                 let message_box = $("#message_box")
@@ -106,7 +130,7 @@ $(document).ready(function (){
                 message_box.css("font-size", "14pt");
             }
         });
-        $("#addNewOperation")[0].reset();
+
     });
     $(".delete").click(function (event) {
         event.preventDefault()
@@ -116,7 +140,7 @@ $(document).ready(function (){
             url: "http://localhost:8080/operations/delete/" + id,
             contentType: "applications/json",
             success: function (){
-                console.log("Успех")
+                $("#row_" + id).hide()
             },
             error: function () {
                 console.log("Ошибка")
@@ -127,11 +151,6 @@ $(document).ready(function (){
         event.preventDefault();
 
         let operationId = $(this).data("id");
-        let name = $("#name_" + operationId).val();
-        let operationDate = $("#datetimepicker_" + operationId).val();
-        let animalId = $("#animal_" + operationId).val();
-        let vetId = $("#vet_" + operationId).val();
-        let assistantId = $("#assistant_" + operationId).val();
 
         $.ajax({
             type: "PUT",
@@ -139,11 +158,13 @@ $(document).ready(function (){
             contentType: "application/json",
             data: JSON.stringify({
                 id: operationId,
-                name: name,
-                operationDate: operationDate,
-                animal: { id: animalId },
-                vet: { id: vetId },
-                assistant: { id: assistantId }
+                name: $("#name_" + operationId).val(),
+                operationDate: $("#datetimepicker_" + operationId).val(),
+                animal: { id: $("#animal_" + operationId).val() },
+                vet: { id: $("#vet_" + operationId).val() },
+                assistant: { id: $("#assistant_" + operationId).val() },
+                medication: {id: $("#medication_" + operationId).val()},
+                amount: $("#amount_" + operationId).val()
             }),
             success: function () {
                 let message_box = $("#message_box");

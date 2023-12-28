@@ -9,6 +9,7 @@ import dev.course.repositories.OwnerRepository;
 import dev.course.repositories.VetRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
+import org.aspectj.apache.bcel.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,16 @@ public class AnimalRestController {
     VetRepository vetRepository;
     @Autowired
     OwnerRepository ownerRepository;
+
+    @GetMapping("/get")
+    public ResponseEntity<Object> get (){
+        try{
+            List<Animal> animals = animalRepository.findAll();
+            return ResponseEntity.status(200).body(animals);
+        }catch (Exception ex){
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
 
     @PostMapping("/add")
     public ResponseEntity<Object> add(@Valid @RequestBody Animal animal){

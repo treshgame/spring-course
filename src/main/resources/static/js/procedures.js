@@ -15,12 +15,16 @@ $(document).ready(function () {
                 },
                 vet: {
                     id: $("#vet").val()
-                }
+                },
+                medication: {id: $("#medication").val()},
+                amount: $("#amount").val()
             }),
             success: function (data) {
                 let procedure = data.procedure;
                 let animals = data.animals;
                 let vets = data.vets;
+                let medications = data.medications;
+
                 let newRow = $("<tr>").attr("id", "row" + procedure.id);
                 newRow.append($("<td>").append($("<input>").attr({
                     type: "text",
@@ -42,7 +46,16 @@ $(document).ready(function () {
                     id: "vet_" + procedure.id,
                     class: "form-control"
                 })));
-
+                newRow.append($("<td>").append($("<select>").attr({
+                    id: "medication_" + procedure.id,
+                    class: "form-control"
+                })));
+                newRow.append($("<td>").append($("<input>").attr({
+                    type: "number",
+                    id: "amount_" + procedure.id,
+                    value: procedure.amount,
+                    class: "form-control"
+                })));
                 vets.forEach(function (vet) {
                     newRow.find("#vet_" + procedure.id).append(
                         $("<option>").attr({
@@ -59,7 +72,15 @@ $(document).ready(function () {
                         }).text(animal.name + " " + animal.kind)
                     );
                 });
-
+                medications.forEach(function (medication) {
+                    newRow.find("#medication_" + procedure.id).append(
+                        $("<option>").attr({
+                            value: medication.id,
+                            selected: procedure.medication.id == medication.id
+                        }).text('Лекарство ' + medication.name + ' от поставщика ' + medication.supplier.name)
+                    );
+                })
+                
                 newRow.append($("<td>").append($("<a>").attr({
                     class: "btn btn-success update",
                     "data-id": procedure.id
@@ -70,6 +91,7 @@ $(document).ready(function () {
                 }).text("Удалить")));
 
                 $("tbody").append(newRow);
+                $("#message_box").text("")
                 $("#addNewProcedure")[0].reset();
             },
             error: function (error){
@@ -93,7 +115,6 @@ $(document).ready(function () {
             contentType: "applications/json",
             success: function (){
                 $("#row_" + id).hide();
-                console.log("Успех")
             },
             error: function () {
                 alert("Ошибка")
@@ -118,7 +139,9 @@ $(document).ready(function () {
                 name: name,
                 procedureDate: procedureDate,
                 animal: { id: animalId },
-                vet: { id: vetId }
+                vet: { id: vetId },
+                medication: {id: $("#medication_" + procedureId).val()},
+                amount: $("#amount_" + procedureId).val()
             }),
             success: function () {
                 let message_box = $("#message_box");

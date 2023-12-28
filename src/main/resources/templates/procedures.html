@@ -17,13 +17,15 @@
                     <th>Животное</th>
                     <th>Дата</th>
                     <th>Врач</th>
+                    <th>Медикамент</th>
+                    <th>Количество</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <form id="addNewProcedure">
-                        <td><input type="text" id="name" class="form-control" required></td>
+                        <td><input type="text" id="name" class="form-control"></td>
                         <td>
                             <select id="animal" class="form-control">
                                 <option th:each="animal : ${animals}" th:value="${animal.id}" th:text="${animal.name} + ' ' + ${animal.kind}"></option>
@@ -35,6 +37,14 @@
                                 <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName} + ' ' + ${vet.mainSpecialization}"></option>
                             </select>
                         </td>
+                        <td>
+                            <select id="medication" class="form-control">
+                                <option th:each="medication : ${medications}"
+                                        th:value="${medication.id}"
+                                        th:text="'Лекартсво ' + ${medication.name} + ' от поставщика ' + ${medication.getSupplier().getName()}"></option>
+                            </select>
+                        </td>
+                        <td><input type="number" id="amount" class="form-control"></td>
                         <td><input type="submit" class="btn btn-success" value="Добавить"></td>
                     </form>
                 </tr>
@@ -52,6 +62,16 @@
                                 <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.fullName} + ' ' + ${vet.mainSpecialization}" th:selected="${procedure.vet.id == vet.id}"></option>
                             </select>
                         </td>
+                        <td>
+                            <select th:id="'medication_' + ${procedure.id}" class="form-control">
+                                <option th:each="medication : ${medications}"
+                                        th:value="${medication.id}"
+                                        th:text="'Лекартсво ' + ${medication.name} + ' от поставщика ' + ${medication.getSupplier().getName()}"
+                                        th:selected="${procedure.medication.id == medication.id}"
+                                ></option>
+                            </select>
+                        </td>
+                        <td><input type="number" th:id="'amount_' + ${procedure.id}" th:value="${procedure.amount}" class="form-control"></td>
                     </form>
                     <td><a class="btn btn-success update" th:attr="data-id=${procedure.id}">Обновить</a></td>
                     <td><a class="btn btn-danger delete" th:attr="data-id=${procedure.id}">Удалить</a></td>

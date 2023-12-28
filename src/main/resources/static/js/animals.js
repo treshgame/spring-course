@@ -19,13 +19,11 @@ $(document).ready(function (){
                 }
             }),
             success: function (data) {
-                // Access Animal, Owners, and Vets from the response
                 let savedAnimal = data.animal;
                 let owners = data.owners;
                 let vets = data.vets;
 
-                // Add a new row to the table with the data returned from the server
-                let newRow = $("<tr>").attr("id", "row" + savedAnimal.id);
+                let newRow = $("<tr>").attr("id", "row_" + savedAnimal.id);
 
                 newRow.append($("<input>").attr({
                     type: "text",
@@ -102,6 +100,7 @@ $(document).ready(function (){
                 // Append the new row to the table
                 $("tbody").append(newRow);
                 $("#addNewAnimal")[0].reset();
+                $("#message_box").text("")
             },error: function (error){
                 let message_box = $("#message_box")
                 message_box.text("");
